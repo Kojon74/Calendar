@@ -3,14 +3,14 @@ import React from "react";
 
 type Props = {};
 
-const DayViewScreen = (props: Props) => {
+const CalendarViewScreen = (props: Props) => {
   return (
     <View>
-      <Text>DayViewScreen</Text>
+      <Text>CalendarViewScreen</Text>
     </View>
   );
 };
 
-export default DayViewScreen;
+export default CalendarViewScreen;
 
 const styles = StyleSheet.create({});
