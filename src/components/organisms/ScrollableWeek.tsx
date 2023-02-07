@@ -49,15 +49,7 @@ const ScrollableWeek = () => {
     );
   };
 
-  const getWeekDates = ({
-    item,
-    index,
-    separators,
-  }: {
-    item: { date: Date; key: Key };
-    index: any;
-    separators: any;
-  }) => {
+  const getWeekDates = ({ item }: { item: { date: Date; key: Key } }) => {
     const weekArray = getCurWeek(item.date);
     return (
       <View
@@ -116,6 +108,11 @@ const ScrollableWeek = () => {
         pagingEnabled
         ref={weekListRef}
         showsHorizontalScrollIndicator={false}
+        getItemLayout={(data, index) => ({
+          length: SCREEN_WIDTH,
+          offset: SCREEN_WIDTH * index,
+          index,
+        })}
         onMomentumScrollEnd={(e) => {
           let newDate =
             weeksList[Math.floor(e.nativeEvent.contentOffset.x / SCREEN_WIDTH)]
@@ -127,7 +124,7 @@ const ScrollableWeek = () => {
           if (isPhysicalScroll.current) setCurDate(newDate.toDateString());
           isPhysicalScroll.current = true;
         }}
-        onScrollToIndexFailed={(err) => console.error(err)}
+        onScrollToIndexFailed={(err) => console.error(weeksList.length, err)}
         renderItem={({ item, index, separators }) =>
           getWeekDates({ item, index, separators })
         }

@@ -16,15 +16,7 @@ const ScrollableDay = () => {
     DATE_BUFFER_LEN,
   } = useGlobalContext();
 
-  const getDateInfo = ({
-    item,
-    index,
-    separators,
-  }: {
-    item: any;
-    index: any;
-    separators: any;
-  }) => {
+  const getDateInfo = ({ item }: { item: any }) => {
     return (
       <View style={styles.flatListCont}>
         <Text>{item.date.toDateString()}</Text>
@@ -41,6 +33,11 @@ const ScrollableDay = () => {
       ref={dateListRef}
       showsHorizontalScrollIndicator={false}
       style={{ backgroundColor: "green" }}
+      getItemLayout={(data, index) => ({
+        length: SCREEN_WIDTH,
+        offset: SCREEN_WIDTH * index,
+        index,
+      })}
       onMomentumScrollEnd={(e) => {
         weekScrollDay.current = false;
         betweenScrolls.current = false;
@@ -60,7 +57,7 @@ const ScrollableDay = () => {
           ].date.toDateString()
         );
       }}
-      onScrollToIndexFailed={(err) => console.error(err)}
+      onScrollToIndexFailed={(err) => console.error("ScrollableDay", err)}
       renderItem={({ item, index, separators }) =>
         getDateInfo({ item, index, separators })
       }

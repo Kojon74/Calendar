@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Dimensions } from "react-native";
 import ContextDefaults from "./contextDefaults";
 
-const AppContext = React.createContext();
+const AppContext = React.createContext(ContextDefaults);
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
