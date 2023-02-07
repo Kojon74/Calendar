@@ -16,6 +16,7 @@ const ScrollableWeek = () => {
     curDate,
     setCurDate,
     weeksList,
+    dateButtonPressed,
     isPhysicalScroll,
     weekListRef,
     weekScrollDay,
@@ -78,6 +79,10 @@ const ScrollableWeek = () => {
                       backgroundColor: "#AAA",
                     },
                   ]}
+                  onPress={() => {
+                    dateButtonPressed.current = true;
+                    setCurDate(weekArray[i].toDateString());
+                  }}
                 >
                   <Text
                     style={[
@@ -125,9 +130,7 @@ const ScrollableWeek = () => {
           isPhysicalScroll.current = true;
         }}
         onScrollToIndexFailed={(err) => console.error(weeksList.length, err)}
-        renderItem={({ item, index, separators }) =>
-          getWeekDates({ item, index, separators })
-        }
+        renderItem={({ item }) => getWeekDates({ item })}
       />
       <Text style={{ fontSize: 17, textAlign: "center" }}>{curDate}</Text>
     </View>

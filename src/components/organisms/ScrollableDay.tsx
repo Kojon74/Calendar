@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import { Dimensions, FlatList, StyleSheet, Text, View } from "react-native";
 import { useGlobalContext } from "../../utils/context";
 
@@ -6,7 +5,6 @@ const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 const ScrollableDay = () => {
   const {
-    curDate,
     setCurDate,
     datesList,
     betweenScrolls,
@@ -58,9 +56,7 @@ const ScrollableDay = () => {
         );
       }}
       onScrollToIndexFailed={(err) => console.error("ScrollableDay", err)}
-      renderItem={({ item, index, separators }) =>
-        getDateInfo({ item, index, separators })
-      }
+      renderItem={({ item }) => getDateInfo({ item })}
     />
   );
 };

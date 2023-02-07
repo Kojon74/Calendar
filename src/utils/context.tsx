@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, FlatList } from "react-native";
 import ContextDefaults from "./contextDefaults";
 
 const AppContext = React.createContext(ContextDefaults);
@@ -52,24 +52,27 @@ const AppProvider = ({ children }: any) => {
   const [curWeek, setCurWeek] = useState(getCurWeek(new Date()));
   const [weeksList, setWeeksList] = useState(getSurroundingWeeks(new Date())); // One day for each week centered around the current day
 
-  const dateListRef = useRef(null);
-  const weekListRef = useRef(null);
+  const dateListRef = useRef<FlatList>(null);
+  const weekListRef = useRef<FlatList>(null);
 
   let betweenScrolls = useRef(false);
   let scrollUpdated = useRef(false);
   let weekScrollDay = useRef(false);
   let isPhysicalScroll = useRef(true);
+  let dateButtonPressed = useRef(true);
 
   useEffect(() => {
     (async () => {
       const curDateObj = new Date(curDate);
+      // Scroll to center of buffer if we near the edges
       if (
         curDateObj <= datesList[1].date ||
-        curDateObj >= datesList[DATE_BUFFER_LEN - 2].date
+        curDateObj >= datesList[DATE_BUFFER_LEN - 2].date ||
+        dateButtonPressed.current === true
       ) {
         if (betweenScrolls) scrollUpdated.current = true;
         setDatesList(getSurroundingDays(curDateObj));
-        dateListRef.current.scrollToOffset({
+        dateListRef.current?.scrollToOffset({
           animated: false,
           offset: Math.floor(DATE_BUFFER_LEN / 2) * SCREEN_WIDTH,
         });
@@ -80,7 +83,7 @@ const AppProvider = ({ children }: any) => {
           setCurWeek(getCurWeek(curDateObj));
         }, 175);
         if (!weekScrollDay.current) {
-          let curIndex;
+          let curIndex = -1;
           const curWeekString = curWeek.map((date) => date.toDateString());
           weeksList.forEach(({ date }, i) => {
             if (curWeekString.includes(date.toDateString())) curIndex = i;
@@ -92,6 +95,7 @@ const AppProvider = ({ children }: any) => {
         }
       }
       weekScrollDay.current = false;
+      dateButtonPressed.current = false;
     })();
   }, [curDate]);
 
@@ -104,7 +108,7 @@ const AppProvider = ({ children }: any) => {
     upperBoundSun.setHours(0, 0, 0, 0);
     if (curWeekSun <= lowerBoundSun || curWeekSun >= upperBoundSun) {
       setWeeksList(getSurroundingWeeks(curWeekSun));
-      weekListRef.current.scrollToOffset({
+      weekListRef.current?.scrollToOffset({
         animated: false,
         offset: Math.floor(DATE_BUFFER_LEN / 2) * SCREEN_WIDTH,
       });
@@ -121,11 +125,12 @@ const AppProvider = ({ children }: any) => {
         weeksList,
         // refs
         betweenScrolls,
+        dateButtonPressed,
         isPhysicalScroll,
         scrollUpdated,
         weekScrollDay,
-        weekListRef,
         dateListRef,
+        weekListRef,
         // constants
         DATE_BUFFER_LEN,
         WEEK_BUFFER_LEN,

@@ -1,4 +1,5 @@
-import { Dispatch, MutableRefObject, SetStateAction } from "react";
+import { Dispatch, MutableRefObject, RefObject, SetStateAction } from "react";
+import { FlatList } from "react-native";
 
 export type ContextType = {
   // states
@@ -7,15 +8,16 @@ export type ContextType = {
   datesList: Array<{ date: Date; key: string }>;
   weeksList: Array<{ date: Date; key: string }>;
   // refs
-  weekListRef: MutableRefObject<null> | undefined;
-  isPhysicalScroll: MutableRefObject<boolean> | undefined;
-  weekScrollDay: MutableRefObject<boolean> | undefined;
+  betweenScrolls: MutableRefObject<boolean>;
+  dateButtonPressed: MutableRefObject<boolean>;
+  isPhysicalScroll: MutableRefObject<boolean>;
+  scrollUpdated: MutableRefObject<boolean>;
+  weekScrollDay: MutableRefObject<boolean>;
+  dateListRef: RefObject<FlatList<any>>;
+  weekListRef: RefObject<FlatList<any>>;
   // constants
   DATE_BUFFER_LEN: number;
   WEEK_BUFFER_LEN: number;
   // functions
-  getCurWeek: (date: Date) => {
-    date: Date;
-    key: string;
-  }[];
+  getCurWeek: (date: Date) => Array<Date>;
 };
