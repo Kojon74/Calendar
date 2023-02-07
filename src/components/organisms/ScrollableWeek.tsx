@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import React, { Key } from "react";
 import { useGlobalContext } from "../../utils/context";
+import { useNavigation } from "@react-navigation/native";
+import DaysOfWeek from "../molecules/DaysOfWeek";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
@@ -24,31 +26,7 @@ const ScrollableWeek = () => {
     getCurWeek,
   } = useGlobalContext();
 
-  const getDaysOfWeek = () => {
-    const daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"];
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-around",
-        }}
-      >
-        {daysOfWeek.map((day, i) => (
-          <Text
-            key={i}
-            style={{
-              width: 35,
-              fontSize: 12,
-              marginBottom: 5,
-              textAlign: "center",
-            }}
-          >
-            {day}
-          </Text>
-        ))}
-      </View>
-    );
-  };
+  const navigation = useNavigation<any>();
 
   const getWeekDates = ({ item }: { item: { date: Date; key: Key } }) => {
     const weekArray = getCurWeek(item.date);
@@ -104,7 +82,7 @@ const ScrollableWeek = () => {
 
   return (
     <View style={styles.container}>
-      {getDaysOfWeek()}
+      <DaysOfWeek />
       <FlatList
         data={weeksList}
         decelerationRate={"fast"}
@@ -133,6 +111,12 @@ const ScrollableWeek = () => {
         renderItem={({ item }) => getWeekDates({ item })}
       />
       <Text style={{ fontSize: 17, textAlign: "center" }}>{curDate}</Text>
+      <TouchableOpacity
+        style={styles.pullDownBarBtn}
+        onPress={() => navigation.navigate("CalendarView")}
+      >
+        <View style={styles.pullDownBar} />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -140,5 +124,13 @@ const ScrollableWeek = () => {
 export default ScrollableWeek;
 
 const styles = StyleSheet.create({
-  container: { height: 75, marginBottom: 5 },
+  container: { height: 100 },
+  pullDownBarBtn: { padding: 8, marginTop: 4 },
+  pullDownBar: {
+    height: 5,
+    width: 50,
+    borderRadius: 5,
+    backgroundColor: "black",
+    alignSelf: "center",
+  },
 });

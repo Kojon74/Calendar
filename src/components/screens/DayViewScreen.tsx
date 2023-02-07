@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import React from "react";
 import ScrollableWeek from "../organisms/ScrollableWeek";
 import ScrollableDay from "../organisms/ScrollableDay";
@@ -15,4 +15,6 @@ const DayViewScreen = () => {
 
 export default DayViewScreen;
 
-const styles = StyleSheet.create({ container: { flex: 1 } });
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
